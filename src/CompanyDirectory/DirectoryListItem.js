@@ -13,9 +13,9 @@ const getRatingColor = (value) => {
   return '#F99607';
 };
 
-const ListItem = ({ company, value, onPress }) => (
+const ListItem = ({ brandName, value, onPress }) => (
   <TouchableOpacity onPress={onPress} style={[styles.itemContainer, { width: itemWidth }]}>
-    <Text style={styles.companyText}>{company}</Text>
+    <Text style={styles.brandNameText}>{brandName}</Text>
     <View style={[styles.valueCircle, { backgroundColor: getRatingColor(value) }]}>
       <Text style={styles.valueText}>{value}</Text>
     </View>
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     backgroundColor: 'rgb(248, 248, 248)',
   },
-  companyText: {
+  brandNameText: {
     fontSize: 18,
     //fontWeight: 'bold',
     color: '#333f4c',

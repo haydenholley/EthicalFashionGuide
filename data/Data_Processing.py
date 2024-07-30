@@ -10,18 +10,23 @@ items = soup.find_all('li')
 data = []
 
 for idx, item in enumerate(items, start=1):
-    name = item['data-name']
-    company = item['data-company'].strip()
-    overall_grade = item.find('span')['data-overall-grade']
 
     data.append({
         'id': str(idx),
-        'data-name': name,
-        'data-company': company,
-        'data-overall-grade': int(overall_grade)
+        'name': item['data-name'],
+        'company': item['data-company'].strip(),
+        'overall-grade': int(item.find('span')['data-overall-grade']),
+        'color_grade': item['data-grade-colorcode'],
+        'statement': item['data-statement'],
+        'grade_policies': item['data-grade-policies'],
+        'grade_tracing': item['data-grade-tracing'],
+        'grade_rights': item['data-grade-rights'],
+        'grade_workers': item['data-grade-workers'],
+        'grade_environment': item['data-grade-environment'],
+        'grade_climate': item['data-grade-climate']
     })
 
 
-with open("Processed_Data.js", 'w+') as file:
+with open("./data/Processed_Data.js", 'w+') as file:
     for i in data:
         file.write(str(i) + '\n')

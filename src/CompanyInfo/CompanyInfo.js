@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const CustomDialog = ({ visible, onClose, company }) => {
+const CustomDialog = ({ visible, onClose, brand }) => {
   return (
     <Modal
       transparent={true}
@@ -11,8 +11,8 @@ const CustomDialog = ({ visible, onClose, company }) => {
     >
       <View style={styles.modalBackground}>
         <View style={styles.dialogContainer}>
-          <Text style={styles.dialogTitle}>{company}</Text>
-          <Text style={styles.dialogContent}>Details about {company}</Text>
+          <Text style={styles.dialogTitle}>{brand}</Text>
+          <Text style={styles.dialogContent}>Details about {brand}</Text>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
