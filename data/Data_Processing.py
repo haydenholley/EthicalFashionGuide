@@ -19,7 +19,7 @@ for idx, item in enumerate(items, start=1):
         'color_grade': item['data-grade-colorcode'],
         'statement': item['data-statement'],
         'grade_policies': item['data-grade-policies'],
-        'grade_tracing': item['data-grade-tracing'],
+        'grade_wage': item['data-grade-tracing'],
         'grade_rights': item['data-grade-rights'],
         'grade_workers': item['data-grade-workers'],
         'grade_environment': item['data-grade-environment'],

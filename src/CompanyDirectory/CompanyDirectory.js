@@ -9,7 +9,7 @@ const CompanyDirectory = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(data);
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [brandData, setSelectedBrand] = useState(null);
   const searchBarRef = useRef(null);
 
   const onChangeSearch = (query) => {
@@ -30,8 +30,8 @@ const CompanyDirectory = () => {
     }
   };
 
-  const handleItemPress = (company) => {
-    setSelectedBrand(company);
+  const handleItemPress = (data) => {
+    setSelectedBrand(data);
     setDialogVisible(true);
   };
 
@@ -60,8 +60,9 @@ const CompanyDirectory = () => {
             <View style={styles.item}>
               <ListItem
                 brandName={item.name}
-                value={item.overall_grade}
-                onPress={() => handleItemPress(item.name)}
+                grade={item.overall_grade}
+                gradeColor={item.color_grade}
+                onPress={() => handleItemPress(item)}
               />
             </View>
           )}
@@ -70,7 +71,7 @@ const CompanyDirectory = () => {
         <CompanyInfo
           visible={dialogVisible}
           onClose={closeDialog}
-          brand={selectedBrand}
+          data={brandData}
         />
       </View>
     </TouchableWithoutFeedback>
