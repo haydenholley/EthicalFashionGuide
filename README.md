@@ -6,3 +6,5 @@ The following features are planned (some in development, others in a completed s
 - Company directory with lookup based on name
 - Ethical score and details for each company
 - Barcode scanner to quickly retrieve company information
+
+![company_directory_screenshot](Company_directory_screenshot.png)
