@@ -30,7 +30,7 @@ function MyTabs() {
         tabBarShowLabel: false,
         headerTitle: () => <CustomHeader />,
         headerStyle: {
-          backgroundColor: '#fff046', //yellow 
+          backgroundColor: '#fff046', //yellow
         }
       })}
       screenListeners={({ navigation, route }) => ({
