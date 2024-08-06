@@ -28,6 +28,8 @@
       "eas": {
         "projectId": "29b64171-3303-45ae-bfd4-c30c906c82f2"
       }
-    }
-  }
+    },
+    "sdkVersion": "51.0.0"
+  },
+  "name": "ethical_fashion_guide"
 }

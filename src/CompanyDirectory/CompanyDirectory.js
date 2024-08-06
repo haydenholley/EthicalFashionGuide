@@ -1,16 +1,41 @@
-import React, { useState, useRef } from 'react';
-import { View, StyleSheet, FlatList, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, FlatList, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Searchbar } from 'react-native-paper';
-import { data } from '../../data/Processed_Data';
+import * as SQLite from 'expo-sqlite/legacy';
 import ListItem from './DirectoryListItem';
 import CompanyInfo from './../CompanyInfo/CompanyInfo';
 
-const CompanyDirectory = () => {
+const CompanyDirectory = ({ db }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredBrands, setFilteredBrands] = useState([]);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [brandData, setSelectedBrand] = useState(null);
   const searchBarRef = useRef(null);
+
+  useEffect(() => {
+    if (db) {
+      console.log('db object:', db);
+      fetchAllBrands();
+    } else {
+      console.log('db is not defined');
+    }
+  }, [db]);
+
+  const fetchAllBrands = () => {
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM CompanyData', [], (tx, results) => {
+        const rows = results.rows;
+        let brands = [];
+
+        for (let i = 0; i < rows.length; i++) {
+          brands.push(rows.item(i));
+        }
+        console.log(brands);
+
+        setFilteredBrands(brands);
+      })
+    })
+  }
 
   const onChangeSearch = (query) => {
     setSearchQuery(query);
@@ -18,16 +43,24 @@ const CompanyDirectory = () => {
   };
 
   const filterData = (query) => {
-    if (query) {
-      const newData = data.filter((item) => {
-        const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
-        const textData = query.toUpperCase();
-        return itemData.indexOf(textData) > -1;
+    const sqlQuery = query
+      ? 'SELECT * FROM CompanyData WHERE name LIKE ?'
+      : 'SELECT * FROM CompanyData';
+
+      const params = query ? ['%${query}%'] : [];
+
+      db.transaction(tx => {
+        tx.executeSql(sqlQuery, params, (tx, results) => {
+          const rows = results.rows;
+          let brands = [];
+
+          for (let i = 0; i < rows.length; i++) {
+            brands.push(rows.item(i));
+          }
+
+          setFilteredBrands(brands);
+        });
       });
-      setFilteredData(newData);
-    } else {
-      setFilteredData(data);
-    }
   };
 
   const handleItemPress = (data) => {
@@ -54,8 +87,8 @@ const CompanyDirectory = () => {
           />
         </View>
         <FlatList
-          data={filteredData}
-          keyExtractor={(item) => item.id}
+          data={filteredBrands}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.item}>
               <ListItem

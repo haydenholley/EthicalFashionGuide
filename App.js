@@ -1,23 +1,25 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import * as SQLite from 'expo-sqlite/legacy';
 import CompanyDirectory from './src/CompanyDirectory/CompanyDirectory';
 import BarcodeScanner from './src/BarcodeScanner/BarcodeScanner';
 import About from './src/About/About';
+import { View, Text, Image, StyleSheet } from 'react-native';
+
 
 const Tab = createBottomTabNavigator();
 
 function CustomHeader() {
   return (
     <View style={styles.headerContainer}>
-      <Image source={require('./assets/BWA_logo.jpg')} style={styles.headerImage} resizeMode="contain" />
+      <Image source={require('./src/assets/images/BWA_logo.jpg')} style={styles.headerImage} resizeMode="contain" />
       <Text style={styles.headerText}>ETHICAL FASHION GUIDE</Text>
     </View>
   );
 }
 
-function MyTabs() {
+function MyTabs({ db }) {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -43,11 +45,11 @@ function MyTabs() {
       })}>
       <Tab.Screen
         name="Company Directory"
-        component={CompanyDirectory} 
+        children={() => <CompanyDirectory db={db} />} 
         options={{ 
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require('./assets/list.png')}
+              source={require('./src/assets/images/list.png')}
               style={[styles.tabIcon, focused ? styles.tabIconFocused: null]}
             />
           ),
@@ -59,7 +61,7 @@ function MyTabs() {
         options={{ 
           tabBarIcon: ( {focused }) => (
             <Image
-              source={require('./assets/barcode.png')}
+              source={require('./src/assets/images/barcode.png')}
               style={[styles.tabIcon, focused ? styles.tabIconFocused: null]}
             />
           ),
@@ -71,7 +73,7 @@ function MyTabs() {
         options={{ 
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require('./assets/question.png')}
+              source={require('./src/assets/images/question.png')}
               style={[styles.tabIcon, focused ? styles.tabIconFocused: null]}
             />
           )
@@ -82,9 +84,28 @@ function MyTabs() {
 }
 
 export default function App() {
+  const [db, setDb] = useState(null);
+
+  useEffect(() => {
+    const openDatabase = () => {
+      console.log('Attempting to open the database...');
+      const dbInstance = SQLite.openDatabase('Company_database.db');
+      setDb(dbInstance);
+      console.log('Database opened successfully');
+    };
+  
+    openDatabase();
+
+  }, []);
+
+  if (!db) {
+    console.log('Database is not ready yet.');
+    return null; // or a loading indicator while the database is being opened
+  }
+
   return (
     <NavigationContainer>
-      <MyTabs />
+      <MyTabs db={db}/>
     </NavigationContainer>
   );
 }
